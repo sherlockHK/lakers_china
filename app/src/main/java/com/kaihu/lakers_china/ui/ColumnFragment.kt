@@ -6,10 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kaihu.lakers_china.IMG
-import com.kaihu.lakers_china.MainAdapter
 import com.kaihu.lakers_china.R
-import com.kaihu.lakers_china.TEXT
+import com.kaihu.lakers_china.adapter.ArticleAdapter
 import com.kaihu.lakers_china.entity.ParagraphEntity
 import kotlinx.android.synthetic.main.fragment_column.*
 import org.jetbrains.anko.doAsync
@@ -70,7 +68,7 @@ class ColumnFragment : Fragment() {
                 article_title.text = titleEle.text()
 
                 article_content.layoutManager = LinearLayoutManager(context)
-                article_content.adapter = MainAdapter(list!!)
+                article_content.adapter = ArticleAdapter(list!!)
             }
         }
     }

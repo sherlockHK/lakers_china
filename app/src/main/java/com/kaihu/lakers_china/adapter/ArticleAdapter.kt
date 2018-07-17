@@ -1,4 +1,4 @@
-package com.kaihu.lakers_china
+package com.kaihu.lakers_china.adapter
 
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
@@ -8,10 +8,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.entity.ParagraphEntity
+import com.kaihu.lakers_china.ui.IMG
+import com.kaihu.lakers_china.ui.TEXT
 import kotlinx.android.synthetic.main.item_article.view.*
 
-class MainAdapter(val items : List<ParagraphEntity>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class ArticleAdapter(val items : List<ParagraphEntity>) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_article, parent, false)
@@ -27,12 +30,12 @@ class MainAdapter(val items : List<ParagraphEntity>) : RecyclerView.Adapter<Main
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
         fun bind(item: ParagraphEntity) {
             when(item.type){
-                TEXT->{
+                TEXT ->{
                     view.item_text.visibility = VISIBLE
                     view.item_image.visibility = GONE
                     view.item_text.text = item.content
                 }
-                IMG->{
+                IMG ->{
                     view.item_text.visibility = GONE
                     view.item_image.visibility = VISIBLE
                     Glide.with(view).load(item.content).into(view.item_image)

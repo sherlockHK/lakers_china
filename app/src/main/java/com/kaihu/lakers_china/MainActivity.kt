@@ -9,9 +9,6 @@ import com.kaihu.lakers_china.ui.HomeFragment
 import com.kaihu.lakers_china.ui.VideoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-const val TEXT: Int = -1
-const val IMG: Int = -2
-
 class MainActivity : AppCompatActivity() {
 
     private val fragments: List<Fragment> = listOf(HomeFragment(), VideoFragment(), ColumnFragment())
@@ -35,11 +32,11 @@ class MainActivity : AppCompatActivity() {
                 onTabItemSelected(0)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_video -> {
                 onTabItemSelected(1)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_column -> {
                 onTabItemSelected(2)
                 return@OnNavigationItemSelectedListener true
             }
