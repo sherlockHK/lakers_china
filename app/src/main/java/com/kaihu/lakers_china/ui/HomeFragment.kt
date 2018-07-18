@@ -3,6 +3,7 @@ package com.kaihu.lakers_china.ui
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,16 +27,43 @@ import org.jsoup.Jsoup
 const val HOST: String = "https://www.lakerschina.com"
 
 class HomeFragment : Fragment() {
-
+    private var index = 1
+    private var isLoading = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    private val list: ArrayList<NewsEntity> = arrayListOf()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initBanner()
+        loadMoreNews()
+        initRecyclerView()
+        initRefreshLayout()
+    }
 
-        initList()
+    private fun initRefreshLayout() {
+        swiperefreshlayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
+        swiperefreshlayout.setOnRefreshListener { refreshNews() }
+    }
+
+    private fun initRecyclerView() {
+        rv_news.layoutManager = LinearLayoutManager(context)
+        rv_news.adapter = NewsAdapter(list)
+        rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                //拿到最后一条的position
+                val layoutManager = rv_news.layoutManager as LinearLayoutManager
+                val endCompletelyPosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                if (endCompletelyPosition <= rv_news.adapter.itemCount - 8) {
+                    //执行加载更多的方法，无论是用接口还是别的方式都行
+                    if (!isLoading) {
+                        loadMoreNews()
+                    }
+                }
+            }
+        })
     }
 
     private fun initBanner() {
@@ -73,29 +101,53 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initList() {
+    private fun refreshNews() {
         doAsync {
-            val doc = Jsoup.connect("$HOST/list/article/18-1/").get()
-            val eles = doc.select("div.textlist")[0].getElementsByClass("item")
-
-            val list: ArrayList<NewsEntity> = arrayListOf()
-            for (e in eles) {
-                val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
-                val info = e.getElementsByClass("info")
-                val xx = info.select("h5").select("a")
-                val articlePath = HOST + xx.attr("href")
-                val title = xx.text()
-
-                val date = info[0].getElementsByClass("pull-right").text()
-
-                list.add(NewsEntity(articlePath, title, img, date))
-            }
+            val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(1)
 
             uiThread {
-                rv_news.layoutManager = LinearLayoutManager(context)
-                rv_news.adapter = NewsAdapter(list)
+                if (rv_news == null) return@uiThread
+                list.clear()
+                list.addAll(listFromDom)
+                rv_news.adapter.notifyDataSetChanged()
+                swiperefreshlayout.isRefreshing = false
+                index = 1
             }
         }
+    }
+
+    private fun loadMoreNews() {
+        doAsync {
+            isLoading = true
+            val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(index)
+
+            uiThread {
+                if (rv_news == null) return@uiThread
+                list.addAll(listFromDom)
+                rv_news.adapter.notifyDataSetChanged()
+                isLoading = false
+                index++
+            }
+        }
+    }
+
+    private fun fetchNewsDomList(index: Int): ArrayList<NewsEntity> {
+        val doc = Jsoup.connect("$HOST/list/article/18-$index/").get()
+        val elements = doc.select("div.textlist")[0].getElementsByClass("item")
+
+        val listFromDom: ArrayList<NewsEntity> = arrayListOf()
+        for (e in elements) {
+            val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
+            val info = e.getElementsByClass("info")
+            val xx = info.select("h5").select("a")
+            val articlePath = HOST + xx.attr("href")
+            val title = xx.text()
+
+            val date = info[0].getElementsByClass("pull-right").text()
+
+            listFromDom.add(NewsEntity(articlePath, title, img, date))
+        }
+        return listFromDom
     }
 
 }

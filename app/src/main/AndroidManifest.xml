@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.ArticleDetailActivity" android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.VideoPlayActivity"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
     </application>
 
 </manifest>
