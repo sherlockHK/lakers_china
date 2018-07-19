@@ -31,34 +31,6 @@ class ArticleDetailActivity : Activity() {
 
         val articlePath = intent.getStringExtra(INTENT_ARTICLE_PATH)
         initData(articlePath)
-//        initDataWebView(articlePath)
-    }
-
-    private fun initDataWebView(path: String?) {
-        doAsync {
-            val document = Jsoup.connect(path).get()
-            val content = document.getElementsByClass("section")[0].select("div.text-content").html().replace("//static", "http://static")
-
-            val linkCss = "<link rel=\"stylesheet\" href=\"file:///android_asset/style.css\" type=\"text/css\">"
-
-            val html = "<html><header>$linkCss</header><body>$content</body></html>"
-            uiThread {
-                print(html)
-                val webSettings = wv_content.settings
-                //支持缩放，默认为true。
-                webSettings.setSupportZoom(false)
-                //调整图片至适合webview的大小
-                webSettings.useWideViewPort = true
-                // 缩放至屏幕的大小
-                webSettings.loadWithOverviewMode = true
-                //设置默认编码
-                webSettings.defaultTextEncodingName = "utf-8"
-                //设置自动加载图片
-                webSettings.loadsImagesAutomatically = true
-
-                wv_content.loadData(html, "text/html", "UTF-8");
-            }
-        }
     }
 
     var list: ArrayList<ParagraphEntity>? = null
@@ -81,7 +53,7 @@ class ArticleDetailActivity : Activity() {
                     content = src.replace("//static", "https://static")
                 } else {
                     type = TEXT
-                    content = e.select("p")[0].text()
+                    content = "\t\t\t\t" + e.select("p")[0].text()
                 }
                 if (e.html().contains("strong")) {
                     isStrong = true
@@ -102,7 +74,7 @@ class ArticleDetailActivity : Activity() {
     }
 
     companion object {
-        private val INTENT_ARTICLE_PATH = "article_path"
+        private const val INTENT_ARTICLE_PATH = "article_path"
         fun newIntent(context: Context, path: String): Intent {
             val intent = Intent(context, ArticleDetailActivity::class.java)
             intent.putExtra(INTENT_ARTICLE_PATH, path)
