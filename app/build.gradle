@@ -45,4 +45,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     compile 'com.youth.banner:banner:1.4.10'
+
 }

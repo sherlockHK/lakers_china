@@ -1,5 +1,6 @@
 package com.kaihu.lakers_china.adapter
 
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.entity.ParagraphEntity
 import com.kaihu.lakers_china.ui.IMG
@@ -28,6 +31,7 @@ class ArticleAdapter(val items : List<ParagraphEntity>) : RecyclerView.Adapter<A
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
+
         fun bind(item: ParagraphEntity) {
             when(item.type){
                 TEXT ->{
@@ -38,7 +42,11 @@ class ArticleAdapter(val items : List<ParagraphEntity>) : RecyclerView.Adapter<A
                 IMG ->{
                     view.item_text.visibility = GONE
                     view.item_image.visibility = VISIBLE
-                    Glide.with(view).load(item.content).into(view.item_image)
+                    Glide.with(view).asBitmap().load(item.content).into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            view.item_image.setImageBitmap(resource)
+                        }
+                    })
                 }
             }
 

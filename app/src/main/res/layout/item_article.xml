@@ -10,11 +10,14 @@
         android:id="@+id/item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#323232"
+        android:lineSpacingExtra="8dp"
+        android:lineSpacingMultiplier="1"
         android:text="balabala"/>
 
-    <ImageView
+    <com.kaihu.lakers_china.ui.view.ResizableImageView
         android:id="@+id/item_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerInside"/>
+        android:layout_height="wrap_content" />
 </FrameLayout>

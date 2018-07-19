@@ -78,7 +78,7 @@ class ArticleDetailActivity : Activity() {
                 if (e.html().contains("img")) {
                     type = IMG
                     val src = e.select("img")[0].attr("src")
-                    content = src.replace("//static", "http://static")
+                    content = src.replace("//static", "https://static")
                 } else {
                     type = TEXT
                     content = e.select("p")[0].text()

@@ -106,10 +106,9 @@ class HomeFragment : Fragment() {
             val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(1)
 
             uiThread {
-                if (rv_news == null) return@uiThread
                 list.clear()
                 list.addAll(listFromDom)
-                rv_news.adapter.notifyDataSetChanged()
+                rv_news?.adapter?.notifyDataSetChanged()
                 swiperefreshlayout.isRefreshing = false
                 index = 1
             }
@@ -122,9 +121,8 @@ class HomeFragment : Fragment() {
             val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(index)
 
             uiThread {
-                if (rv_news == null) return@uiThread
                 list.addAll(listFromDom)
-                rv_news.adapter.notifyDataSetChanged()
+                rv_news?.adapter?.notifyDataSetChanged()
                 isLoading = false
                 index++
             }
