@@ -3,16 +3,21 @@ package com.kaihu.lakers_china.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.webkit.WebSettings
+import android.text.TextUtils
+import android.view.View
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.kaihu.lakers_china.R
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import kotlinx.android.synthetic.main.activity_video_play.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 
 /**
  * Created by kai on 2018/7/17
@@ -27,20 +32,11 @@ class VideoPlayActivity : Activity() {
 
         val url = intent.getStringExtra(VIDEO_PAGE_PATH)
 
-        val webSettings = h5_player.settings
-        webSettings.javaScriptEnabled = true;
-        webSettings.useWideViewPort = true; // 关键点
-        webSettings.allowFileAccess = true;
-        webSettings.setSupportZoom(true); //
-        webSettings.cacheMode = WebSettings.LOAD_NO_CACHE; // 不加载缓存内容
-        webSettings.useWideViewPort = true
-        webSettings.loadWithOverviewMode = true
-        webSettings.pluginState = WebSettings.PluginState.ON;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW;
-        }
+        initPlayer()
+        parseDom(url)
+    }
 
-
+    private fun parseDom(url: String?) {
         doAsync {
             val doc = Jsoup.connect(url)
                     .header("Accept-Encoding", "gzip, deflate")
@@ -57,21 +53,31 @@ class VideoPlayActivity : Activity() {
         }
     }
 
+    private fun initPlayer() {
+        videoPlayer.titleTextView.visibility = View.VISIBLE
+        //设置返回键
+        videoPlayer.backButton.visibility = View.VISIBLE
+        //设置旋转
+        orientationUtils = OrientationUtils(this, videoPlayer)
+        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+        videoPlayer.fullscreenButton.setOnClickListener { orientationUtils?.resolveByClick() }
+        //是否可以滑动调整
+        videoPlayer.setIsTouchWiget(true)
+        //设置返回按键功能
+        videoPlayer.backButton.setOnClickListener { onBackPressed() }
+    }
+
     private fun parseVideoPath(url: String) {
-        var videoUrl = "<p>加载失败<p/>"
+        var videoUrl: String
         val vid: String
         val type: String
         if (url.indexOf("youku.com") > 0 && url.indexOf("/id_") > 0) {
             vid = url.split("/id_")[1].split(".")[0]
             videoUrl = "$HOST/player.youku.com/embed/$vid"
-
-            println("videoUrl: $videoUrl")
-            h5_player.loadUrl(videoUrl)
+            play(videoUrl)
         } else if (url.indexOf("v.ums.uc.cn") > 0) {
             videoUrl = url
-
-            println("videoUrl: $videoUrl")
-            h5_player.loadUrl(videoUrl)
+            play(videoUrl)
         } else if (url.indexOf("live.qq.com") > 0 && url.indexOf("/v/") > 0) {
             vid = url.split("/v/")[1].split("?")[0]
             type = "qqlive"
@@ -89,19 +95,58 @@ class VideoPlayActivity : Activity() {
         }
     }
 
+    private var orientationUtils: OrientationUtils? = null
     private fun getPathFromLakersChina(vid: String, type: String) {
         Fuel.get("$HOST/public/geturl/index.php?site=$type&show=json&id=$vid")
                 .responseJson(handler = { request, response, result ->
                     println(request.toString())
                     println(response.toString())
                     println(result.toString())
-                    val videourl = result.get().array().getJSONObject(0).optString("url")
+                    val videoUrl = result.get().array().getJSONObject(0).optString("url")
 
-                    println("videourl: $videourl")
-                    h5_player.loadUrl(videourl)
+                    play(videoUrl)
                 })
     }
 
+    private fun play(videoUrl: String?) {
+        println("videoUrl: $videoUrl")
+
+        if (TextUtils.isEmpty(videoUrl)) {
+            Toast.makeText(this, "视频地址为空", LENGTH_LONG).show()
+            return
+        }
+        videoPlayer.setUp(videoUrl, true, "测试视频")
+        videoPlayer.startPlayLogic()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        videoPlayer.onVideoPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        videoPlayer.onVideoResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        GSYVideoManager.releaseAllVideos()
+        if (orientationUtils != null)
+            orientationUtils?.releaseListener()
+    }
+
+    override fun onBackPressed() {
+        //先返回正常状态
+        if (orientationUtils?.screenType == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            videoPlayer.fullscreenButton.performClick();
+            return
+        }
+        //释放所有
+        videoPlayer.setVideoAllCallBack(null)
+        super.onBackPressed()
+    }
 
     companion object {
         private const val VIDEO_PAGE_PATH = "videoPagePath"

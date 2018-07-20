@@ -47,7 +47,7 @@ dependencies {
 
     compile 'com.youth.banner:banner:1.4.10'
 
-//    network
     compile 'com.github.kittinunf.fuel:fuel-android:1.14.0'
+    compile 'com.shuyu:GSYVideoPlayer:5.0.0-beta'
 
 }
