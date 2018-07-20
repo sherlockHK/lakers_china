@@ -29,7 +29,7 @@ class ColumnFragment : Fragment() {
         initData()
     }
 
-    var list: ArrayList<ParagraphEntity>? = null
+    private var list: ArrayList<ParagraphEntity>? = null
     private fun initData() {
         doAsync {
             val document = Jsoup.connect("https://www.lakerschina.com/show/article/855/").get()
@@ -54,10 +54,6 @@ class ColumnFragment : Fragment() {
                 if (e.html().contains("strong")) {
                     isStrong = true
                 }
-
-//                if (e.html() == "<strong>原文：</strong>") {
-//                    break
-//                }
 
                 val p = ParagraphEntity(type, content, isStrong)
                 list?.add(p)

@@ -38,14 +38,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initBanner()
-        loadMoreNews()
         initRecyclerView()
         initRefreshLayout()
+
+        loadMoreNews()
     }
 
     private fun initRefreshLayout() {
-        swiperefreshlayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
-        swiperefreshlayout.setOnRefreshListener { refreshNews() }
+        srl_home.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary)
+        srl_home.setOnRefreshListener { refreshNews() }
     }
 
     private fun initRecyclerView() {
@@ -109,7 +110,7 @@ class HomeFragment : Fragment() {
                 list.clear()
                 list.addAll(listFromDom)
                 rv_news?.adapter?.notifyDataSetChanged()
-                swiperefreshlayout.isRefreshing = false
+                srl_home.isRefreshing = false
                 index = 1
             }
         }
