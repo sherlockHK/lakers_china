@@ -1,10 +1,10 @@
 package com.kaihu.lakers_china.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
@@ -13,18 +13,18 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.kaihu.lakers_china.R
 import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import kotlinx.android.synthetic.main.activity_video_play.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 
 /**
  * Created by kai on 2018/7/17
  * Email：kaihu1989@gmail.com
- * Feature:
+ * Feature: 视频播放
  */
-class VideoPlayActivity : Activity() {
+class VideoPlayActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +115,11 @@ class VideoPlayActivity : Activity() {
             Toast.makeText(this, "视频地址为空", LENGTH_LONG).show()
             return
         }
+        videoPlayer.enlargeImageRes = R.drawable.full_screen
+        videoPlayer.shrinkImageRes = R.drawable.de_full_screen
         videoPlayer.setUp(videoUrl, true, "测试视频")
         videoPlayer.startPlayLogic()
+//        videoPlayer.startWindowFullscreen(this, false,true)
     }
 
     override fun onPause() {

@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initBanner()
+
         initRecyclerView()
         initRefreshLayout()
 
@@ -144,7 +145,7 @@ class HomeFragment : Fragment() {
 
             val date = info[0].getElementsByClass("pull-right").text()
 
-            listFromDom.add(NewsEntity(articlePath, title, img, date))
+            listFromDom.add(NewsEntity(articlePath, title, img, date, ""))
         }
         return listFromDom
     }

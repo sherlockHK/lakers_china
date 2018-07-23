@@ -28,6 +28,7 @@ class NewsAdapter(val items : List<NewsEntity>) : RecyclerView.Adapter<NewsAdapt
             Glide.with(view).load(item.img).into(view.video_img)
             view.video_title.text = item.title
             view.video_date.text = item.date
+            view.tv_type.text = item.type
 
             view.setOnClickListener {
                 val intent = ArticleDetailActivity.newIntent(view.context!!, item.articlePath)

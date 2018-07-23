@@ -5,4 +5,4 @@ package com.kaihu.lakers_china.entity
  * Email：kaihu1989@gmail.com
  * Feature:
  */
-data class NewsEntity(var articlePath: String, val title:String, val img: String, val date: String)
+data class NewsEntity(var articlePath: String, val title:String, val img: String, val date: String, val type:String)

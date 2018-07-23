@@ -1,10 +1,10 @@
 package com.kaihu.lakers_china.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.adapter.ArticleAdapter
@@ -24,10 +24,11 @@ import org.jsoup.Jsoup
 const val TEXT: Int = -1
 const val IMG: Int = -2
 
-class ArticleDetailActivity : Activity() {
+class ArticleDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitvity_article_detail)
+
 
         val articlePath = intent.getStringExtra(INTENT_ARTICLE_PATH)
         initData(articlePath)

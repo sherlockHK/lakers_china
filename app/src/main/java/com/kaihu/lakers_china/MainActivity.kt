@@ -1,5 +1,6 @@
 package com.kaihu.lakers_china
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        StatusBarUtil.setTransparentForImageView(this, banner)
         val transaction = supportFragmentManager.beginTransaction()
         for (fg in fragments){
             transaction?.add(R.id.main_container, fg)
@@ -52,4 +54,7 @@ class MainActivity : AppCompatActivity() {
         transaction.show(fragments[position])
         transaction.commit()
     }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onSaveInstanceState(outState: Bundle?) {}
 }
