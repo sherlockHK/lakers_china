@@ -10,7 +10,7 @@
     android:layout_marginTop="5dp">
 
     <ImageView
-        android:id="@+id/video_img"
+        android:id="@+id/news_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -22,15 +22,15 @@
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <com.kaihu.lakers_china.ui.view.AlignTextView
-        android:id="@+id/video_title"
+        android:id="@+id/news_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/video_img"
-        app:layout_constraintTop_toTopOf="@+id/video_img" />
+        app:layout_constraintStart_toEndOf="@+id/news_img"
+        app:layout_constraintTop_toTopOf="@+id/news_img" />
 
     <TextView
         android:id="@+id/video_date"
@@ -50,5 +50,5 @@
         android:layout_marginStart="8dp"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/video_img" />
+        app:layout_constraintStart_toEndOf="@+id/news_img" />
 </android.support.constraint.ConstraintLayout>

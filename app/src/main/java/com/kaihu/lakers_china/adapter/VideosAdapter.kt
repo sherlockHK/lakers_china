@@ -30,8 +30,8 @@ class VideosAdapter(private val items : List<VideoEntity>) : RecyclerView.Adapte
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view){
         fun bind(item: VideoEntity) {
-            Glide.with(view).load(item.img).into(view.video_img)
-            view.video_title.text = item.title
+            Glide.with(view).load(item.img).into(view.news_img)
+            view.news_title.text = item.title
             view.tv_video_type.text = item.videoType
             view.video_date.text = item.date
 

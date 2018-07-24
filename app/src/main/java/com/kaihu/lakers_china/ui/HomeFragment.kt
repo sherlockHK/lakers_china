@@ -96,7 +96,7 @@ class HomeFragment : Fragment() {
                         .setImageLoader(GlideImageLoader())
                         .start()
                         .setOnBannerListener({ position ->
-                            val intent = ArticleDetailActivity.newIntent(context!!, list[position].path)
+                            val intent = ArticleDetailActivity.newIntent(context!!, list[position].path, list[position].img)
                             startActivity(intent)
                         })
             }
