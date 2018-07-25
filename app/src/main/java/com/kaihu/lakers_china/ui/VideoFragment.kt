@@ -49,7 +49,7 @@ class VideoFragment : Fragment() {
                 //拿到最后一条的position
                 val layoutManager = rv_videos.layoutManager as LinearLayoutManager
                 val endCompletelyPosition = layoutManager.findLastCompletelyVisibleItemPosition()
-                if (endCompletelyPosition <= rv_videos.adapter.itemCount - 8) {
+                if (endCompletelyPosition >= rv_videos.adapter.itemCount - 8) {
                     //执行加载更多的方法，无论是用接口还是别的方式都行
                     if (!isLoading) {
                         loadMoreVideos()
@@ -68,7 +68,7 @@ class VideoFragment : Fragment() {
                 list.addAll(listFromDom)
                 rv_videos?.adapter?.notifyDataSetChanged()
                 srl_video.isRefreshing = false
-                index = 1
+                index = 2
             }
         }
     }

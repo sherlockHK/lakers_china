@@ -52,8 +52,6 @@ class ArticleDetailActivity : AppCompatActivity() {
             supportActionBar!!.setHomeAsUpIndicator(newdrawable)
         }
 
-        Glide.with(this).load(articleImg).into(article_img)
-
         Glide.with(this)
                 .load(articleImg)
                 .apply(RequestOptions().centerCrop().dontAnimate())
@@ -96,7 +94,8 @@ class ArticleDetailActivity : AppCompatActivity() {
                     content = src.replace("//static", "https://static")
                 } else {
                     type = TEXT
-                    content = "\t\t\t\t" + e.select("p")[0].text()
+//                    content = "\t\t\t\t" + e.select("p")[0].text()
+                    content = e.select("p")[0].text()
                 }
                 if (e.html().contains("strong")) {
                     isStrong = true
@@ -109,6 +108,10 @@ class ArticleDetailActivity : AppCompatActivity() {
             uiThread {
                 println(list)
                 collapsingToolbarLayout.title = titleEle.text()
+                if (list!![0].type == IMG){
+                    val firstImg = list!!.removeAt(0)
+                    list!!.add(firstImg)
+                }
 
                 article_content.layoutManager = LinearLayoutManager(this@ArticleDetailActivity)
                 article_content.adapter = ArticleAdapter(list!!)

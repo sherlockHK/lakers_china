@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
                 //拿到最后一条的position
                 val layoutManager = rv_news.layoutManager as LinearLayoutManager
                 val endCompletelyPosition = layoutManager.findLastCompletelyVisibleItemPosition()
-                if (endCompletelyPosition <= rv_news.adapter.itemCount - 8) {
+                if (endCompletelyPosition >= rv_news.adapter.itemCount - 8) {
                     //执行加载更多的方法，无论是用接口还是别的方式都行
                     if (!isLoading) {
                         loadMoreNews()
@@ -95,10 +95,10 @@ class HomeFragment : Fragment() {
                         .setDelayTime(5000)
                         .setImageLoader(GlideImageLoader())
                         .start()
-                        .setOnBannerListener({ position ->
+                        .setOnBannerListener { position ->
                             val intent = ArticleDetailActivity.newIntent(context!!, list[position].path, list[position].img)
                             startActivity(intent)
-                        })
+                        }
             }
         }
     }
@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
                 list.addAll(listFromDom)
                 rv_news?.adapter?.notifyDataSetChanged()
                 srl_home.isRefreshing = false
-                index = 1
+                index = 2
             }
         }
     }
