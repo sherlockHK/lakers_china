@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:background="?attr/colorPrimary"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:text="专栏"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-    </android.support.v7.widget.Toolbar>
+            android:layout_height="@dimen/toolbar_height"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="专栏"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_news"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </android.support.v4.widget.SwipeRefreshLayout>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

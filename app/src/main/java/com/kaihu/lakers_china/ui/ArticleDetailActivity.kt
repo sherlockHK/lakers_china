@@ -3,11 +3,8 @@ package com.kaihu.lakers_china.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -18,6 +15,7 @@ import com.bumptech.glide.request.target.Target
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.adapter.ArticleAdapter
 import com.kaihu.lakers_china.entity.ParagraphEntity
+import com.kaihu.lakers_china.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.acitvity_article_detail.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -34,7 +32,7 @@ import org.jsoup.Jsoup
 const val TEXT: Int = -1
 const val IMG: Int = -2
 
-class ArticleDetailActivity : AppCompatActivity() {
+class ArticleDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitvity_article_detail)
@@ -44,13 +42,7 @@ class ArticleDetailActivity : AppCompatActivity() {
         val articleImg = intent.getStringExtra(INTENT_ARTICLE_IMG)
 
         setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            val drawable = resources.getDrawable(R.drawable.return_back)
-            val bitmap = (drawable as BitmapDrawable).bitmap
-            val newdrawable = BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, 80, 80, true))
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.setHomeAsUpIndicator(newdrawable)
-        }
+        article_back.setOnClickListener { finish() }
 
         Glide.with(this)
                 .load(articleImg)

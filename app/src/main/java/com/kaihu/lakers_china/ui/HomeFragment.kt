@@ -1,16 +1,18 @@
 package com.kaihu.lakers_china.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.adapter.NewsAdapter
 import com.kaihu.lakers_china.entity.BannerEntity
 import com.kaihu.lakers_china.entity.NewsEntity
+import com.kaihu.lakers_china.ui.base.BaseFragment
 import com.kaihu.lakers_china.utils.GlideImageLoader
 import com.youth.banner.BannerConfig
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -26,7 +28,7 @@ import org.jsoup.Jsoup
  */
 const val HOST: String = "https://www.lakerschina.com"
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     private var index = 1
     private var isLoading = false
 
@@ -43,6 +45,17 @@ class HomeFragment : Fragment() {
         initRefreshLayout()
 
         loadMoreNews()
+    }
+
+    override fun onScrollToTop() {
+        if (rv_news == null) return
+        rv_news.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+        val manager = rv_news.layoutManager as LinearLayoutManager
+        if (manager.findFirstVisibleItemPosition() > 20) {
+            manager.scrollToPositionWithOffset(0, 0)
+        } else {
+            rv_news.post { rv_news.smoothScrollToPosition(0) }
+        }
     }
 
     private fun initRefreshLayout() {

@@ -2,21 +2,23 @@ package com.kaihu.lakers_china.ui
 
 import android.graphics.Point
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.os.SystemClock
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.adapter.TAG
 import com.kaihu.lakers_china.adapter.VideoListAdapter
 import com.kaihu.lakers_china.entity.VideoEntity
+import com.kaihu.lakers_china.ui.base.BaseFragment
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper
-import kotlinx.android.synthetic.main.fragment_video.*
+import kotlinx.android.synthetic.main.fragment_video_list.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
@@ -27,7 +29,7 @@ import org.jsoup.Jsoup
  * Email：kaihu1989@gmail.com
  * Feature:
  */
-class VideoListFragment : Fragment() {
+class VideoListFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_video_list, container, false)
     }
@@ -140,10 +142,31 @@ class VideoListFragment : Fragment() {
         return false
     }
 
+    override fun onPause() {
+        super.onPause()
+        GSYVideoManager.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GSYVideoManager.onResume(true)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         smallVideoHelper!!.releaseVideoPlayer()
         GSYVideoManager.releaseAllVideos()
+    }
+
+    override fun onScrollToTop() {
+        if (rv_videos == null) return
+        rv_videos.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_CANCEL, 0f, 0f, 0))
+        val manager = rv_videos.layoutManager as LinearLayoutManager
+        if (manager.findFirstVisibleItemPosition() > 20) {
+            manager.scrollToPositionWithOffset(0, 0)
+        } else {
+            rv_videos.post { rv_videos.smoothScrollToPosition(0) }
+        }
     }
 
     private fun refreshVideos() {
