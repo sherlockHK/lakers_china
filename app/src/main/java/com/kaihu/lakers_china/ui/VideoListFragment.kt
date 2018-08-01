@@ -198,7 +198,7 @@ class VideoListFragment : BaseFragment() {
     }
 
     private fun fetchVideosDomList(index: Int): ArrayList<VideoEntity> {
-        val doc = Jsoup.connect("$HOST/list/video/0-$index/").get()
+        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/video/0-$index/").get()
         val elements = doc.select("div.textlist")[0].getElementsByClass("item")
 
         val listFromDom: ArrayList<VideoEntity> = arrayListOf()
@@ -206,7 +206,7 @@ class VideoListFragment : BaseFragment() {
             val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
             val xx = info.select("h5").select("a")
-            val articlePath = HOST + xx.attr("href")
+            val articlePath = HOST_LAKERS_CHINA + xx.attr("href")
             val title = xx.text()
 
             val videoType = info[0].getElementsByClass("pull-left").text()

@@ -9,8 +9,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.kaihu.lakers_china.R
-import com.kaihu.lakers_china.adapter.NewsAdapter
-import com.kaihu.lakers_china.entity.NewsEntity
+import com.kaihu.lakers_china.adapter.HupuFortumAdapter
+import com.kaihu.lakers_china.entity.HupuForumItemEntity
 import com.kaihu.lakers_china.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.doAsync
@@ -20,15 +20,16 @@ import org.jsoup.Jsoup
 /**
  * Created by kai on 2018/7/16
  * Email：kaihu1989@gmail.com
- * Feature:专栏
+ * Feature:hupu湖人专区
  */
-class ColumnFragment : BaseFragment() {
+const val HOST_HUPU_LAKERS = "https://bbs.hupu.com"
+class HupuFragment : BaseFragment() {
     private var index = 1
 
     private var isLoading = false
-    private val list: ArrayList<NewsEntity> = arrayListOf()
+    private val list: ArrayList<HupuForumItemEntity> = arrayListOf()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_column, container, false)
+        return inflater.inflate(R.layout.fragment_hupu, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +58,7 @@ class ColumnFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         rv_news.layoutManager = LinearLayoutManager(context)
-        rv_news.adapter = NewsAdapter(list)
+        rv_news.adapter = HupuFortumAdapter(list)
         rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 //拿到最后一条的position
@@ -75,7 +76,7 @@ class ColumnFragment : BaseFragment() {
 
     private fun refreshNews() {
         doAsync {
-            val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(1)
+            val listFromDom: ArrayList<HupuForumItemEntity> = fetchNewsDomList(1)
 
             uiThread {
                 list.clear()
@@ -90,7 +91,7 @@ class ColumnFragment : BaseFragment() {
     private fun loadMoreNews() {
         doAsync {
             isLoading = true
-            val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(index)
+            val listFromDom: ArrayList<HupuForumItemEntity> = fetchNewsDomList(index)
 
             uiThread {
                 list.addAll(listFromDom)
@@ -101,23 +102,22 @@ class ColumnFragment : BaseFragment() {
         }
     }
 
-    private fun fetchNewsDomList(index: Int): ArrayList<NewsEntity> {
-        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/article/19-$index/").get()
-        val elements = doc.select("div.textlist")[0].getElementsByClass("item")
+    private fun fetchNewsDomList(index: Int): ArrayList<HupuForumItemEntity> {
+        val doc = Jsoup.connect("$HOST_HUPU_LAKERS/lakers-$index").get()
+        val elements = doc.select("ul.for-list").first().select("li")
 
-        val listFromDom: ArrayList<NewsEntity> = arrayListOf()
+        val listFromDom: ArrayList<HupuForumItemEntity> = arrayListOf()
         for (e in elements) {
-            val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
-            val info = e.getElementsByClass("info")
-            val xx = info.select("h5").select("a")
-            val articlePath = HOST_LAKERS_CHINA + xx.attr("href")
-            val title = xx.text()
 
-            val type = info[0].getElementsByClass("pull-left").text()
-            val date = info[0].getElementsByClass("pull-right").text()
+            val titleEle = e.select("a.truetit").first()
+            val title = titleEle.text()
+            val articlePath = HOST_HUPU_LAKERS + titleEle.attr("href")
+            val author = e.getElementsByClass("aulink").first().text()
+            val date = e.select("div.author").select("a")[1].text()
 
-            listFromDom.add(NewsEntity(articlePath, title, img, date,type))
+            listFromDom.add(HupuForumItemEntity(articlePath, title, author , date))
         }
+        listFromDom.removeAt(0)
         return listFromDom
     }
 

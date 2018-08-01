@@ -11,7 +11,7 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.entity.VideoEntity
-import com.kaihu.lakers_china.ui.HOST
+import com.kaihu.lakers_china.ui.HOST_LAKERS_CHINA
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper
 import kotlinx.android.synthetic.main.item_video_list.view.*
 import org.jetbrains.anko.doAsync
@@ -91,7 +91,7 @@ class VideoListAdapter(private val items: List<VideoEntity>, smallVideoHelper: G
             val type: String
             if (url.indexOf("youku.com") > 0 && url.indexOf("/id_") > 0) {
                 vid = url.split("/id_")[1].split(".")[0]
-                videoUrl = "$HOST/player.youku.com/embed/$vid"
+                videoUrl = "$HOST_LAKERS_CHINA/player.youku.com/embed/$vid"
             } else if (url.indexOf("v.ums.uc.cn") > 0) {
                 videoUrl = url
             } else if (url.indexOf("live.qq.com") > 0 && url.indexOf("/v/") > 0) {
@@ -113,7 +113,7 @@ class VideoListAdapter(private val items: List<VideoEntity>, smallVideoHelper: G
         }
 
         private fun getPathFromLakersChina(vid: String, type: String, title: String) {
-            Fuel.get("$HOST/public/geturl/index.php?site=$type&show=json&id=$vid")
+            Fuel.get("$HOST_LAKERS_CHINA/public/geturl/index.php?site=$type&show=json&id=$vid")
                     .responseJson(handler = { request, response, result ->
                         println(request.toString())
                         println(response.toString())

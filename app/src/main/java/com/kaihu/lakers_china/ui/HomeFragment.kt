@@ -26,7 +26,7 @@ import org.jsoup.Jsoup
  * Email：kaihu1989@gmail.com
  * Feature:home
  */
-const val HOST: String = "https://www.lakerschina.com"
+const val HOST_LAKERS_CHINA: String = "https://www.lakerschina.com"
 
 class HomeFragment : BaseFragment() {
     private var index = 1
@@ -83,7 +83,7 @@ class HomeFragment : BaseFragment() {
 
     private fun initBanner() {
         doAsync {
-            val doc = Jsoup.connect(HOST).get()
+            val doc = Jsoup.connect(HOST_LAKERS_CHINA).get()
             val swiperList = doc.select("div.swiper-wrapper").select("a")
             println(swiperList)
 
@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment() {
             for (e in swiperList) {
                 val title: String = e.select("span").text()
                 val img: String = e.select("img").attr("src").replace("//static", "http://static")
-                val path: String = HOST + e.attr("href")
+                val path: String = HOST_LAKERS_CHINA + e.attr("href")
 
                 val p = BannerEntity(title, img, path)
                 list.add(p)
@@ -145,7 +145,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun fetchNewsDomList(index: Int): ArrayList<NewsEntity> {
-        val doc = Jsoup.connect("$HOST/list/article/18-$index/").get()
+        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/article/18-$index/").get()
         val elements = doc.select("div.textlist")[0].getElementsByClass("item")
 
         val listFromDom: ArrayList<NewsEntity> = arrayListOf()
@@ -153,7 +153,7 @@ class HomeFragment : BaseFragment() {
             val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
             val xx = info.select("h5").select("a")
-            val articlePath = HOST + xx.attr("href")
+            val articlePath = HOST_LAKERS_CHINA + xx.attr("href")
             val title = xx.text()
 
             val date = info[0].getElementsByClass("pull-right").text()

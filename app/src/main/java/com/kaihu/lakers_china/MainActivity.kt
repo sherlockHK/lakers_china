@@ -2,19 +2,24 @@ package com.kaihu.lakers_china
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.design.internal.BottomNavigationItemView
+import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.view.KeyEvent
 import android.widget.Toast
 import com.kaihu.lakers_china.ui.ColumnFragment
 import com.kaihu.lakers_china.ui.HomeFragment
+import com.kaihu.lakers_china.ui.HupuFragment
 import com.kaihu.lakers_china.ui.VideoListFragment
 import com.kaihu.lakers_china.ui.base.BaseActivity
 import com.kaihu.lakers_china.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+
 class MainActivity : BaseActivity() {
 
-    private val fragments: List<BaseFragment> = listOf(HomeFragment(), VideoListFragment(), ColumnFragment())
+    private val fragments: List<BaseFragment> = listOf(HomeFragment(), VideoListFragment(), ColumnFragment(), HupuFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,7 +31,7 @@ class MainActivity : BaseActivity() {
         }
         transaction.commit()
         onTabItemSelected(0)
-
+        disableShiftMode()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
@@ -42,6 +47,10 @@ class MainActivity : BaseActivity() {
             }
             R.id.navigation_column -> {
                 onClickBottomTap(2)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_hupu -> {
+                onClickBottomTap(3)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -91,4 +100,25 @@ class MainActivity : BaseActivity() {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @SuppressLint("RestrictedApi")
+    fun disableShiftMode() {
+        val menuView = navigation.getChildAt(0) as BottomNavigationMenuView
+        try {
+            val shiftingMode = menuView.javaClass.getDeclaredField("mShiftingMode")
+            shiftingMode.isAccessible = true
+            shiftingMode.setBoolean(menuView, false)
+            shiftingMode.isAccessible = false
+            for (i in 0 until menuView.childCount) {
+                val item = menuView.getChildAt(i) as BottomNavigationItemView
+                item.setShiftingMode(false)
+                item.setChecked(item.itemData.isChecked)
+            }
+        } catch (e: NoSuchFieldException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        }
+    }
+
 }
