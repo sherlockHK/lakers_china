@@ -31,13 +31,12 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
                 app:layout_collapseMode="pin" >
                 <ImageView
                     android:id="@+id/article_back"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="5dp"
-                    android:src="@drawable/return_back"/>
+                    style="@style/toolbar_back" />
 
             </android.support.v7.widget.Toolbar>
         </net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout>

@@ -9,7 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.kaihu.lakers_china.R
-import com.kaihu.lakers_china.adapter.HupuFortumAdapter
+import com.kaihu.lakers_china.adapter.HupuForumAdapter
 import com.kaihu.lakers_china.entity.HupuForumItemEntity
 import com.kaihu.lakers_china.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -22,12 +22,14 @@ import org.jsoup.Jsoup
  * Email：kaihu1989@gmail.com
  * Feature:hupu湖人专区
  */
-const val HOST_HUPU_LAKERS = "https://bbs.hupu.com"
+const val HOST_HUPU_BBS = "https://bbs.hupu.com"
 class HupuFragment : BaseFragment() {
     private var index = 1
 
     private var isLoading = false
     private val list: ArrayList<HupuForumItemEntity> = arrayListOf()
+    private var team = "lakers"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hupu, container, false)
     }
@@ -58,7 +60,7 @@ class HupuFragment : BaseFragment() {
 
     private fun initRecyclerView() {
         rv_news.layoutManager = LinearLayoutManager(context)
-        rv_news.adapter = HupuFortumAdapter(list)
+        rv_news.adapter = HupuForumAdapter(list)
         rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 //拿到最后一条的position
@@ -103,7 +105,7 @@ class HupuFragment : BaseFragment() {
     }
 
     private fun fetchNewsDomList(index: Int): ArrayList<HupuForumItemEntity> {
-        val doc = Jsoup.connect("$HOST_HUPU_LAKERS/lakers-$index").get()
+        val doc = Jsoup.connect("$HOST_HUPU_BBS/$team-$index").get()
         val elements = doc.select("ul.for-list").first().select("li")
 
         val listFromDom: ArrayList<HupuForumItemEntity> = arrayListOf()
@@ -111,7 +113,7 @@ class HupuFragment : BaseFragment() {
 
             val titleEle = e.select("a.truetit").first()
             val title = titleEle.text()
-            val articlePath = HOST_HUPU_LAKERS + titleEle.attr("href")
+            val articlePath = HOST_HUPU_BBS + titleEle.attr("href")
             val author = e.getElementsByClass("aulink").first().text()
             val date = e.select("div.author").select("a")[1].text()
 

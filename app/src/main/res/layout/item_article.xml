@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:letterSpacing="0.03"
+        android:autoLink="web"
         android:textColor="@color/article_text_color"
         android:lineSpacingExtra="8dp"
         android:lineSpacingMultiplier="1"
