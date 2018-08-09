@@ -106,16 +106,15 @@ class HupuFragment : BaseFragment() {
 
     private fun fetchNewsDomList(index: Int): ArrayList<HupuForumItemEntity> {
         val doc = Jsoup.connect("$HOST_HUPU_BBS/$team-$index").get()
-        val elements = doc.select("ul.for-list").first().select("li")
+        val elements = doc.select("div.common-list").first().select("li")
 
         val listFromDom: ArrayList<HupuForumItemEntity> = arrayListOf()
         for (e in elements) {
 
-            val titleEle = e.select("a.truetit").first()
-            val title = titleEle.text()
-            val articlePath = HOST_HUPU_BBS + titleEle.attr("href")
-            val author = e.getElementsByClass("aulink").first().text()
-            val date = e.select("div.author").select("a")[1].text()
+            val title = e.select("div.news-txt").first().select("h3").text()
+            val articlePath = e.select("a").attr("href").replace("//", "http://")
+            val author = e.getElementsByClass("news-source").first().text()
+            val date = e.getElementsByClass("news-time").text()
 
             listFromDom.add(HupuForumItemEntity(articlePath, title, author , date))
         }

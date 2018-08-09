@@ -34,7 +34,7 @@ class HupuForumAdapter(val items: List<HupuForumItemEntity>) : RecyclerView.Adap
 
             view.setOnClickListener {
                 Toast.makeText(view.context, item.articlePath,LENGTH_SHORT).show()
-                val intent = PostDetailActivity.newIntent(view.context!!, item.articlePath, item.title)
+                val intent = PostDetailActivity.newIntent(view.context!!, item.articlePath, item.title, item.author)
                 view.context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(view.context as MainActivity,
                         view.tv_hupu_title, "post_title")
                         .toBundle())

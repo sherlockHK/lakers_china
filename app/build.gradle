@@ -54,4 +54,6 @@ dependencies {
     compile 'com.umeng.sdk:common:1.5.0'
     compile 'com.umeng.sdk:analytics:7.5.0'
 
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
+
 }

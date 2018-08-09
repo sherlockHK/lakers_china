@@ -12,33 +12,62 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title=""
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways"
+            app:title="">
+
             <ImageView
                 android:id="@+id/post_back"
                 style="@style/toolbar_back" />
 
+            <ImageView
+                android:id="@+id/iv_post_author_img"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
+
             <TextView
-                android:id="@+id/post_title"
+                android:id="@+id/tv_post_author_name"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:transitionName="post_title"
-                android:singleLine="true"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/article_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tv_post_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:singleLine="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/article_text_color"
+            android:background="@color/white"
+            android:textSize="16sp"
+            android:transitionName="post_title" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/post_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/white" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/post_reply"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

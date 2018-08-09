@@ -47,3 +47,11 @@
 -keep public class [您的应用包名].R$*{
 public static final int *;
 }
+
+# BRVAH
+-keep class com.chad.library.adapter.** { *; }
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
+    <init>(android.view.View);
+}
