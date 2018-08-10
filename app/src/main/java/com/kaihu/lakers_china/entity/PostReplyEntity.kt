@@ -5,4 +5,4 @@ package com.kaihu.lakers_china.entity
  * Email：kaihu1989@gmail.com
  * Feature:
  */
-data class PostReplyEntity(var avatar: String, var username: String, var owner: String, var replyTime: String, var content: String)
+data class PostReplyEntity(var avatar: String, var username: String, var owner: String, var replyTime: String, var content: String, var img: String, val likeNum: String)

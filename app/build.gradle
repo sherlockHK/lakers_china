@@ -55,5 +55,5 @@ dependencies {
     compile 'com.umeng.sdk:analytics:7.5.0'
 
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
-
+    compile 'com.flipboard:bottomsheet-core:1.5.3'
 }

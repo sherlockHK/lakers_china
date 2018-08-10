@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
+import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -14,9 +15,12 @@ import com.kaihu.lakers_china.adapter.ArticleAdapter
 import com.kaihu.lakers_china.adapter.PostReplyAdapter
 import com.kaihu.lakers_china.entity.ParagraphEntity
 import com.kaihu.lakers_china.entity.PostReplyEntity
+import com.kaihu.lakers_china.entity.ReplyEntity
 import com.kaihu.lakers_china.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.acitvity_post_detail.*
+import kotlinx.android.synthetic.main.bottom_sheet_reply.view.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.onClick
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -31,6 +35,7 @@ import org.jsoup.nodes.Element
 
 
 class PostDetailActivity : BaseActivity() {
+    var postReplyAdapter:PostReplyAdapter ?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitvity_post_detail)
@@ -48,8 +53,15 @@ class PostDetailActivity : BaseActivity() {
 
         initData(postPath)
 
-        post_reply.layoutManager = LinearLayoutManager(this@PostDetailActivity)
-        post_reply.adapter = PostReplyAdapter(replyList!!)
+        val inflate = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_reply, bsl_reply, false)
+        inflate.post_reply?.layoutManager = LinearLayoutManager(this@PostDetailActivity)
+        postReplyAdapter = PostReplyAdapter(R.layout.item_post_reply, R.layout.item_reply_header, arrayListOf())
+        inflate.post_reply?.adapter = postReplyAdapter
+
+        postReplyAdapter?.setEmptyView(R.layout.layout_loading, inflate.post_reply)
+        fab_reply.onClick {
+            bsl_reply.showWithSheetView(inflate)
+        }
     }
 
     var list: ArrayList<ParagraphEntity>? = null
@@ -75,6 +87,8 @@ class PostDetailActivity : BaseActivity() {
                         content =text
                         if (text.contains("strong")){
                             isStrong = true
+                        }else if (text.contains("能看专业及时的新闻")){
+                            break
                         }
                     }else {
                         val src = e.select("center img").attr("src")
@@ -109,29 +123,54 @@ class PostDetailActivity : BaseActivity() {
         }
     }
 
-    var replyList: ArrayList<PostReplyEntity>? = arrayListOf()
     private fun fetchReply(replyDom: Element) {
         doAsync {
             val brightDom = replyDom.select("div.bright-reply").first()
-            val brights = brightDom.select("dl.reply-list")
+            val allDom = replyDom.select("div.replay_all").first()
+            val brights = brightDom?.select("dl.reply-list")
+            val all = allDom.select("dl.reply-list")
 
-            val list = arrayListOf<PostReplyEntity>()
-            for (e in brights){
+            val list = arrayListOf<ReplyEntity>()
+            list.add(ReplyEntity(true, "热门评论"))
+            if (brights != null) {
+                for (e in brights){
+                    val userDom = e.getElementsByClass("user-info").first()
+                    val avatar = userDom.select("div.avatar a img").attr("data-echo")
+                    val username = userDom.getElementsByClass("user-name").text()
+                    val owner = userDom.getElementsByClass("reply-own").text()
+                    val replyTime = userDom.getElementsByClass("times").text()
+
+                    var likeNum = e.getElementsByClass("bright-number-box").first().text()
+                    likeNum = likeNum.substring(1,likeNum.length-1)
+
+                    val content = e.getElementsByClass("short-content").first().text()
+                    val img = e.select("center img").attr("src")
+
+
+                    list.add(ReplyEntity(PostReplyEntity(avatar, username, owner, replyTime, content, img,likeNum)))
+                }
+            }
+
+            list.add(ReplyEntity(true, "全部评论"))
+
+            for (e in all){
                 val userDom = e.getElementsByClass("user-info").first()
                 val avatar = userDom.select("div.avatar a img").attr("data-echo")
                 val username = userDom.getElementsByClass("user-name").text()
-                val owner = userDom.getElementsByClass("replu-own").text()
+                val owner = userDom.getElementsByClass("reply-own").text()
                 val replyTime = userDom.getElementsByClass("times").text()
 
-                val content = e.getElementsByClass("short-content").first().text()
+                var likeNum = e.getElementsByClass("bright-number-box").first().text()
+                likeNum = likeNum.substring(1,likeNum.length-1)
 
-                list?.add(PostReplyEntity(avatar,username,owner,replyTime,content))
+                val content = e.getElementsByClass("short-content").first().text()
+                val img = e.select("center img").attr("src")
+
+                list.add(ReplyEntity(PostReplyEntity(avatar, username, owner, replyTime, content, img,likeNum)))
             }
 
             uiThread {
-                replyList?.clear()
-                replyList?.addAll(list)
-                post_reply.adapter.notifyDataSetChanged()
+                postReplyAdapter?.setNewData(list)
             }
         }
     }
