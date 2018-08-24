@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bsl_reply"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_bg">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -26,18 +27,39 @@
                     android:id="@+id/post_back"
                     style="@style/toolbar_back" />
 
-                <ImageView
-                    android:id="@+id/iv_post_author_img"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/tv_post_author_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    <ImageView
+                        android:id="@+id/iv_post_author_img"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentLeft="true"/>
+
+                    <TextView
+                        android:id="@+id/tv_post_author_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/white"
+                        android:layout_below="@+id/iv_post_author_img"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_post_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:singleLine="true"
+                        android:layout_toRightOf="@+id/tv_post_author_name"
+                        android:textColor="@color/article_text_color"
+                        android:textSize="16sp"
+                        android:transitionName="post_title" />
+                </RelativeLayout>
+
 
 
             </android.support.v7.widget.Toolbar>
@@ -48,19 +70,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <TextView
-                android:id="@+id/tv_post_title"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:singleLine="true"
-                android:textColor="@color/article_text_color"
-                android:textSize="16sp"
-                android:transitionName="post_title" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/post_content"

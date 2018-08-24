@@ -2,17 +2,22 @@ package com.kaihu.lakers_china.ui
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.adapter.HupuForumAdapter
+import com.kaihu.lakers_china.adapter.PostMenuAdapter
 import com.kaihu.lakers_china.entity.HupuForumItemEntity
+import com.kaihu.lakers_china.entity.HupuMenuEntity
 import com.kaihu.lakers_china.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.bottom_sheet_menu.view.*
+import kotlinx.android.synthetic.main.fragment_hupu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
@@ -23,12 +28,14 @@ import org.jsoup.Jsoup
  * Feature:hupu湖人专区
  */
 const val HOST_HUPU_BBS = "https://bbs.hupu.com"
+
 class HupuFragment : BaseFragment() {
     private var index = 1
 
     private var isLoading = false
     private val list: ArrayList<HupuForumItemEntity> = arrayListOf()
     private var team = "lakers"
+    private var menuAdapter: PostMenuAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hupu, container, false)
@@ -36,10 +43,61 @@ class HupuFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initMenu()
         initRecyclerView()
         initRefreshLayout()
 
         loadMoreNews()
+    }
+
+    private fun initMenu() {
+        val inflate = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_menu, bsl_menu, false)
+        inflate.post_menu?.layoutManager = GridLayoutManager(context, 2)
+        menuAdapter = PostMenuAdapter()
+        menuAdapter?.openLoadAnimation(BaseQuickAdapter.SCALEIN)
+        menuAdapter?.setDuration(500)
+        menuAdapter?.isFirstOnly(true)
+        menuAdapter?.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+            val menu = adapter.getItem(position) as HupuMenuEntity
+            team = menu.path
+            tv_hupu_title.text = menu.name
+
+            index =1
+            list.clear()
+            loadMoreNews()
+            bsl_menu.dismissSheet()
+        }
+
+        inflate.post_menu?.adapter = menuAdapter
+
+        toolbar.inflateMenu(R.menu.hupu_menu)
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.other_topic -> {
+                    bsl_menu.showWithSheetView(inflate)
+
+                    menuAdapter?.setNewData(generateMenuData())
+                }
+            }
+            true
+        }
+
+        bsl_menu.addOnSheetDismissedListener {
+            menuAdapter?.setNewData(arrayListOf())
+        }
+    }
+
+    fun generateMenuData(): ArrayList<HupuMenuEntity> {
+        val list = arrayListOf<HupuMenuEntity>()
+        list.add(HupuMenuEntity("lakers", "lakers", R.drawable.lakers))
+        list.add(HupuMenuEntity("rockets", "rockets", R.drawable.default_pic))
+        list.add(HupuMenuEntity("湿乎乎", "vote", R.drawable.default_pic))
+        list.add(HupuMenuEntity("步行街", "bxj", R.drawable.default_pic))
+        list.add(HupuMenuEntity("图图图", "4846", R.drawable.default_pic))
+        list.add(HupuMenuEntity("暴躁", "selfie", R.drawable.default_pic))
+        list.add(HupuMenuEntity("数码", "digital", R.drawable.default_pic))
+        return list
     }
 
     override fun onScrollToTop() {
@@ -116,7 +174,7 @@ class HupuFragment : BaseFragment() {
             val author = e.getElementsByClass("news-source").first().text()
             val date = e.getElementsByClass("news-time").text()
 
-            listFromDom.add(HupuForumItemEntity(articlePath, title, author , date))
+            listFromDom.add(HupuForumItemEntity(articlePath, title, author, date))
         }
         listFromDom.removeAt(0)
         return listFromDom

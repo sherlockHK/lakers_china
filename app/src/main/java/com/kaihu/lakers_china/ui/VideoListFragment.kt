@@ -147,9 +147,10 @@ class VideoListFragment : BaseFragment() {
         GSYVideoManager.onPause()
     }
 
-    override fun onResume() {
-        super.onResume()
-        GSYVideoManager.onResume(true)
+    override fun onHiddenChanged(hidden: Boolean) {
+        if(hidden && !smallVideoHelper!!.isSmall){
+            GSYVideoManager.onPause()
+        }
     }
 
     override fun onDestroy() {
