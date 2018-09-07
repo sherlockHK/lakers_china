@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
     android:elevation="16dp"
+    android:id="@+id/cl_news"
     android:background="@drawable/article_item_background"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"

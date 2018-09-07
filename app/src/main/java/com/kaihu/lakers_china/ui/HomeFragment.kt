@@ -63,9 +63,12 @@ class HomeFragment : BaseFragment() {
         srl_home.setOnRefreshListener { refreshNews() }
     }
 
+    private val mAdapter = NewsAdapter()
     private fun initRecyclerView() {
         rv_news.layoutManager = LinearLayoutManager(context)
-        rv_news.adapter = NewsAdapter(list)
+        mAdapter.setNewData(list)
+        rv_news.adapter = mAdapter
+
         rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 //拿到最后一条的position
@@ -121,9 +124,7 @@ class HomeFragment : BaseFragment() {
             val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(1)
 
             uiThread {
-                list.clear()
-                list.addAll(listFromDom)
-                rv_news?.adapter?.notifyDataSetChanged()
+                mAdapter.setNewData(listFromDom)
                 srl_home.isRefreshing = false
                 index = 2
             }
@@ -136,8 +137,7 @@ class HomeFragment : BaseFragment() {
             val listFromDom: ArrayList<NewsEntity> = fetchNewsDomList(index)
 
             uiThread {
-                list.addAll(listFromDom)
-                rv_news?.adapter?.notifyDataSetChanged()
+                mAdapter.addData(listFromDom)
                 isLoading = false
                 index++
             }
@@ -145,21 +145,26 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun fetchNewsDomList(index: Int): ArrayList<NewsEntity> {
-        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/article/18-$index/").get()
-        val elements = doc.select("div.textlist")[0].getElementsByClass("item")
+        val newsDoc = Jsoup.connect("$HOST_LAKERS_CHINA/list/article/6-$index").get()
+        val columnDoc = Jsoup.connect("$HOST_LAKERS_CHINA/special/list-20-0-$index").get()
+        val newsElements = newsDoc.select("div.textlist")[0].getElementsByClass("item")
+        var elements = columnDoc.select("div.textlist")[0].getElementsByClass("item")
 
+        newsElements.addAll(elements)
         val listFromDom: ArrayList<NewsEntity> = arrayListOf()
-        for (e in elements) {
-            val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
+        for (e in newsElements) {
+            val img = e.getElementsByClass("image").select("a img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
-            val xx = info.select("h5").select("a")
+            val xx = info.select("dt a")
             val articlePath = HOST_LAKERS_CHINA + xx.attr("href")
             val title = xx.text()
 
-            val date = info[0].getElementsByClass("pull-right").text()
+            val type  = info[0].getElementsByClass("ulink").text()
+            val date = info[0].getElementsByClass("date").text()
 
-            listFromDom.add(NewsEntity(articlePath, title, img, date, ""))
+            listFromDom.add(NewsEntity(articlePath, title, img, date, type))
         }
+        listFromDom.sortByDescending { it.date }
         return listFromDom
     }
 

@@ -10,7 +10,9 @@
         android:id="@+id/tv_hupu_menu_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mememe"
+        android:text="湖人"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:textColor="@color/white"/>
 
@@ -18,16 +20,17 @@
         android:id="@+id/tv_hupu_menu_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="mememe"
+        android:text=""
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:textColor="@color/white"/>
 
     <ImageView
         android:id="@+id/iv_hupu_menu_bg"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:scaleType="centerCrop"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/lakers"/>
 </RelativeLayout>

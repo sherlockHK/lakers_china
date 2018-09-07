@@ -70,8 +70,8 @@ class ArticleDetailActivity : BaseActivity() {
     private fun initData(path: String) {
         doAsync {
             val document = Jsoup.connect(path).get()
-            val titleEle = document.select("h1.text-title")
-            val contents = document.select("div.text-content")[0]
+            val titleEle = document.select("h1.art-title")
+            val contents = document.select("div#art-content").first()
             val pEles = contents.select("p")
 
             list = arrayListOf()

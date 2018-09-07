@@ -7,7 +7,6 @@ import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.view.KeyEvent
 import android.widget.Toast
-import com.kaihu.lakers_china.ui.ColumnFragment
 import com.kaihu.lakers_china.ui.HomeFragment
 import com.kaihu.lakers_china.ui.HupuFragment
 import com.kaihu.lakers_china.ui.VideoListFragment
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    private val fragments: List<BaseFragment> = listOf(HomeFragment(), VideoListFragment(), ColumnFragment(), HupuFragment())
+    private val fragments: List<BaseFragment> = listOf(HomeFragment(), VideoListFragment(), HupuFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,12 +44,8 @@ class MainActivity : BaseActivity() {
                 onClickBottomTap(1)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_column -> {
-                onClickBottomTap(2)
-                return@OnNavigationItemSelectedListener true
-            }
             R.id.navigation_hupu -> {
-                onClickBottomTap(3)
+                onClickBottomTap(2)
                 return@OnNavigationItemSelectedListener true
             }
         }

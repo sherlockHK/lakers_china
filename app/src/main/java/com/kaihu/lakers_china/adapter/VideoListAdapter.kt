@@ -67,8 +67,7 @@ class VideoListAdapter(private val items: List<VideoEntity>, smallVideoHelper: G
                         .maxBodySize(0)
                         .timeout(10000)
                         .get()
-                val playerBox = doc.select("#player-box")[0]
-                val dataUrl = playerBox.attr("data-url")
+                val dataUrl = doc.select("#video-container").first().attr("data-url")
 
                 uiThread {
                     val videoUrl = parseVideoPath(dataUrl, title)

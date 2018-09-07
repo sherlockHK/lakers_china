@@ -199,19 +199,19 @@ class VideoListFragment : BaseFragment() {
     }
 
     private fun fetchVideosDomList(index: Int): ArrayList<VideoEntity> {
-        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/video/0-$index/").get()
+        val doc = Jsoup.connect("$HOST_LAKERS_CHINA/list/video/0-$index").get()
         val elements = doc.select("div.textlist")[0].getElementsByClass("item")
 
         val listFromDom: ArrayList<VideoEntity> = arrayListOf()
         for (e in elements) {
-            val img = e.getElementsByClass("pic").select("a img").attr("src").replace("//static", "http://static")
+            val img = e.getElementsByClass("image").select("a img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
-            val xx = info.select("h5").select("a")
+            val xx = info.select("dt a")
             val articlePath = HOST_LAKERS_CHINA + xx.attr("href")
             val title = xx.text()
 
-            val videoType = info[0].getElementsByClass("pull-left").text()
-            val date = info[0].getElementsByClass("pull-right").text()
+            val videoType = info[0].getElementsByClass("ulink").text()
+            val date = info[0].getElementsByClass("date").text()
 
             listFromDom.add(VideoEntity(articlePath, title, img, videoType, date))
         }

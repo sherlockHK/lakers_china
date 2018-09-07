@@ -90,13 +90,13 @@ class HupuFragment : BaseFragment() {
 
     fun generateMenuData(): ArrayList<HupuMenuEntity> {
         val list = arrayListOf<HupuMenuEntity>()
-        list.add(HupuMenuEntity("lakers", "lakers", R.drawable.lakers))
-        list.add(HupuMenuEntity("rockets", "rockets", R.drawable.default_pic))
-        list.add(HupuMenuEntity("湿乎乎", "vote", R.drawable.default_pic))
-        list.add(HupuMenuEntity("步行街", "bxj", R.drawable.default_pic))
+        list.add(HupuMenuEntity("湖人论坛", "lakers", R.drawable.lakers))
+        list.add(HupuMenuEntity("火箭论坛", "rockets", R.drawable.rockets_logo))
+        list.add(HupuMenuEntity("湿乎乎的话题", "vote", R.drawable.default_pic))
+        list.add(HupuMenuEntity("步行街主干道", "bxj", R.drawable.default_pic))
         list.add(HupuMenuEntity("图图图", "4846", R.drawable.default_pic))
-        list.add(HupuMenuEntity("暴躁", "selfie", R.drawable.default_pic))
-        list.add(HupuMenuEntity("数码", "digital", R.drawable.default_pic))
+        list.add(HupuMenuEntity("大家来爆照", "selfie", R.drawable.default_pic))
+        list.add(HupuMenuEntity("数码区", "digital", R.drawable.default_pic))
         return list
     }
 

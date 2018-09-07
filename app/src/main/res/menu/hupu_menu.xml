@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/other_topic"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/jrs_logo"
         android:title="其他"
         app:showAsAction="ifRoom" />
 </menu>
