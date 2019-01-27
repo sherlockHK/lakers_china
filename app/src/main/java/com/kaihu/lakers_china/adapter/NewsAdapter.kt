@@ -11,6 +11,7 @@ import com.kaihu.lakers_china.MainActivity
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.entity.NewsEntity
 import com.kaihu.lakers_china.ui.ArticleDetailActivity
+import com.kaihu.lakers_china.utils.Utils
 
 //class NewsAdapter(val items: List<NewsEntity>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 //
@@ -45,7 +46,7 @@ import com.kaihu.lakers_china.ui.ArticleDetailActivity
 class NewsAdapter : BaseQuickAdapter<NewsEntity, BaseViewHolder>(R.layout.item_news) {
     override fun convert(helper: BaseViewHolder?, item: NewsEntity?) {
         val newsImG = helper?.getView<ImageView>(R.id.news_img)
-        Glide.with(mContext).load(item?.img).into(newsImG!!)
+        Glide.with(mContext).load(Utils.getDoorChainUrl(item?.img)).into(newsImG!!)
         helper?.setText(R.id.news_title, item?.title)
                 ?.setText(R.id.video_date, item?.date)
                 ?.setText(R.id.tv_type, item?.type)

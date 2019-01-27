@@ -62,6 +62,11 @@ class HupuFragment : BaseFragment() {
             val menu = adapter.getItem(position) as HupuMenuEntity
             team = menu.path
             tv_hupu_title.text = menu.name
+            var resId = menu.img_res
+            if(resId == 0){
+                resId = R.drawable.default_pic
+            }
+            toolbar.menu.getItem(0).icon = context?.getDrawable(resId)
 
             index =1
             list.clear()
@@ -90,13 +95,14 @@ class HupuFragment : BaseFragment() {
 
     fun generateMenuData(): ArrayList<HupuMenuEntity> {
         val list = arrayListOf<HupuMenuEntity>()
-        list.add(HupuMenuEntity("湖人论坛", "lakers", R.drawable.lakers))
+        list.add(HupuMenuEntity("湖人论坛", "lakers", R.drawable.lakers_logo))
         list.add(HupuMenuEntity("火箭论坛", "rockets", R.drawable.rockets_logo))
-        list.add(HupuMenuEntity("湿乎乎的话题", "vote", R.drawable.default_pic))
-        list.add(HupuMenuEntity("步行街主干道", "bxj", R.drawable.default_pic))
-        list.add(HupuMenuEntity("图图图", "4846", R.drawable.default_pic))
-        list.add(HupuMenuEntity("大家来爆照", "selfie", R.drawable.default_pic))
-        list.add(HupuMenuEntity("数码区", "digital", R.drawable.default_pic))
+        list.add(HupuMenuEntity("勇士论坛", "warriors", R.drawable.warriors_logo))
+        list.add(HupuMenuEntity("湿乎乎的话题", "vote", 0))
+        list.add(HupuMenuEntity("步行街主干道", "bxj", 0))
+        list.add(HupuMenuEntity("图图图", "4846", 0))
+        list.add(HupuMenuEntity("大家来爆照", "selfie", 0))
+        list.add(HupuMenuEntity("数码区", "digital", 0))
         return list
     }
 

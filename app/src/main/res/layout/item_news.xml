@@ -24,7 +24,7 @@
         app:layout_constraintDimensionRatio="w,4:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/default_pic" />
+        app:srcCompat="@drawable/lakers_logo" />
 
     <TextView
         android:id="@+id/news_title"

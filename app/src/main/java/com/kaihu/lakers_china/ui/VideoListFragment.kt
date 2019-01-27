@@ -204,7 +204,7 @@ class VideoListFragment : BaseFragment() {
 
         val listFromDom: ArrayList<VideoEntity> = arrayListOf()
         for (e in elements) {
-            val img = e.getElementsByClass("image").select("a img").attr("src").replace("//static", "http://static")
+            val img = e.getElementsByClass("image").select("img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
             val xx = info.select("dt a")
             val articlePath = HOST_LAKERS_CHINA + xx.attr("href")

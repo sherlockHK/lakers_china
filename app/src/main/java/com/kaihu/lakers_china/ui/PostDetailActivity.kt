@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
@@ -18,9 +19,8 @@ import com.kaihu.lakers_china.entity.PostReplyEntity
 import com.kaihu.lakers_china.entity.ReplyEntity
 import com.kaihu.lakers_china.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.acitvity_post_detail.*
-import kotlinx.android.synthetic.main.bottom_sheet_reply.view.*
+import kotlinx.android.synthetic.main.post_content_layout.view.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.onClick
 import org.jetbrains.anko.uiThread
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -51,21 +51,25 @@ class PostDetailActivity : BaseActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         post_back.setOnClickListener { finish() }
 
-        initData(postPath)
-
-        val inflate = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_reply, bsl_reply, false)
-        inflate.post_reply?.layoutManager = LinearLayoutManager(this@PostDetailActivity)
+        //帖子回复
+        val inflate = LayoutInflater.from(this).inflate(R.layout.post_content_layout, bsl_reply, false)
         postReplyAdapter = PostReplyAdapter(R.layout.item_post_reply, R.layout.item_reply_header, arrayListOf())
-        inflate.post_reply?.adapter = postReplyAdapter
+        post_reply?.layoutManager = LinearLayoutManager(this@PostDetailActivity)
+        post_reply?.adapter = postReplyAdapter
 
-        postReplyAdapter?.setEmptyView(R.layout.layout_loading, inflate.post_reply)
-        fab_reply.onClick {
-            bsl_reply.showWithSheetView(inflate)
-        }
+        postReplyAdapter?.setEmptyView(R.layout.layout_loading, post_reply)
+        postReplyAdapter!!.addHeaderView(inflate)
+
+        initPostContent(postPath, inflate.post_content)
+
+        //暂时不用BottomSheetLayout
+//        fab_reply.onClick {
+//            bsl_reply.showWithSheetView(post_reply)
+//        }
     }
 
     var list: ArrayList<ParagraphEntity>? = null
-    private fun initData(path: String) {
+    private fun initPostContent(path: String, postContent: RecyclerView) {
         doAsync {
             val document = Jsoup.connect(path).get()
             val authorDom = document.select("div.detail-author").first()
@@ -115,8 +119,8 @@ class PostDetailActivity : BaseActivity() {
                 println(list)
                 Glide.with(iv_post_author_img).load(authorAvatar).apply(RequestOptions.bitmapTransform(CircleCrop())).into(iv_post_author_img)
 
-                post_content.layoutManager = LinearLayoutManager(this@PostDetailActivity)
-                post_content.adapter = ArticleAdapter(list!!)
+                postContent.layoutManager = LinearLayoutManager(this@PostDetailActivity)
+                postContent.adapter = ArticleAdapter(list!!, false)
 
                 fetchReply(replysDom)
             }
@@ -131,8 +135,8 @@ class PostDetailActivity : BaseActivity() {
             val all = allDom.select("dl.reply-list")
 
             val list = arrayListOf<ReplyEntity>()
-            list.add(ReplyEntity(true, "热门评论"))
             if (brights != null) {
+                list.add(ReplyEntity(true, "热门评论"))
                 for (e in brights){
                     val userDom = e.getElementsByClass("user-info").first()
                     val avatar = userDom.select("div.avatar a img").attr("data-echo")

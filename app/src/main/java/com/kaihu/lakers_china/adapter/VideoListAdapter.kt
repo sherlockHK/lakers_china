@@ -12,6 +12,7 @@ import com.github.kittinunf.fuel.android.extension.responseJson
 import com.kaihu.lakers_china.R
 import com.kaihu.lakers_china.entity.VideoEntity
 import com.kaihu.lakers_china.ui.HOST_LAKERS_CHINA
+import com.kaihu.lakers_china.utils.Utils
 import com.shuyu.gsyvideoplayer.utils.GSYVideoHelper
 import kotlinx.android.synthetic.main.item_video_list.view.*
 import org.jetbrains.anko.doAsync
@@ -27,7 +28,7 @@ const val TAG: String = "VideoListAdapter"
 
 class VideoListAdapter(private val items: List<VideoEntity>, smallVideoHelper: GSYVideoHelper, gsySmallVideoHelperBuilder: GSYVideoHelper.GSYVideoHelperBuilder) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_video_list, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(com.kaihu.lakers_china.R.layout.item_video_list, parent, false)
         return ViewHolder(view)
     }
 
@@ -48,11 +49,11 @@ class VideoListAdapter(private val items: List<VideoEntity>, smallVideoHelper: G
             //增加封面
             val imageView = ImageView(view.context)
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-            Glide.with(view).load(item.img).into(imageView)
+            Glide.with(view).load(Utils.getDoorChainUrl(item.img)).into(imageView)
 
             smallVideoHelper.addVideoPlayer(position, imageView, TAG, view.list_item_container, view.list_item_btn)
 
-            view.findViewById<ImageView>(R.id.list_item_btn).setOnClickListener {
+            view.findViewById<ImageView>(com.kaihu.lakers_china.R.id.list_item_btn).setOnClickListener {
                 notifyDataSetChanged()
                 smallVideoHelper.setPlayPositionAndTag(position, TAG)
                 parseDom(item.videoPagePath, item.title)

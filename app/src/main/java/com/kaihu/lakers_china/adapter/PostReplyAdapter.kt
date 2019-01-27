@@ -34,7 +34,7 @@ class PostReplyAdapter constructor(layoutResId: Int, sectionHeadResId: Int, data
                 .setText(R.id.tv_reply_content, replyItem?.content)
 
         val imageView = helper.getView<ImageView>(R.id.iv_reply_avatar)
-        Glide.with(imageView).load(replyItem?.avatar).apply(RequestOptions().circleCrop().placeholder(R.drawable.lakers)).into(imageView)
+        Glide.with(imageView).load(replyItem?.avatar).apply(RequestOptions().circleCrop().placeholder(R.drawable.lakers_logo)).into(imageView)
 
         val postImg = helper.getView<ImageView>(R.id.iv_post_img)
         val imgUrl = replyItem?.img

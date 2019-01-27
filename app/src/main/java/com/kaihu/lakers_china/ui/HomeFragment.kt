@@ -153,7 +153,7 @@ class HomeFragment : BaseFragment() {
         newsElements.addAll(elements)
         val listFromDom: ArrayList<NewsEntity> = arrayListOf()
         for (e in newsElements) {
-            val img = e.getElementsByClass("image").select("a img").attr("src").replace("//static", "http://static")
+            val img = e.getElementsByClass("image").select("img").attr("src").replace("//static", "http://static")
             val info = e.getElementsByClass("info")
             val xx = info.select("dt a")
             val articlePath = HOST_LAKERS_CHINA + xx.attr("href")

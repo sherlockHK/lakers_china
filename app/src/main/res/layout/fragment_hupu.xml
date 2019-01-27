@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="lakers"
+                    android:text="湖人论坛"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

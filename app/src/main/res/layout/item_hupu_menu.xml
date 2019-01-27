@@ -26,11 +26,11 @@
         android:textColor="@color/white"/>
 
     <ImageView
-        android:id="@+id/iv_hupu_menu_bg"
+        android:id="@+id/iv_hupu_menu_icon"
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:scaleType="centerInside"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/tv_hupu_menu_title"
         android:layout_alignParentRight="true"
-        android:src="@drawable/lakers"/>
+        android:src="@drawable/lakers_logo"/>
 </RelativeLayout>

@@ -106,7 +106,7 @@ class ArticleDetailActivity : BaseActivity() {
                 }
 
                 article_content.layoutManager = LinearLayoutManager(this@ArticleDetailActivity)
-                article_content.adapter = ArticleAdapter(list!!)
+                article_content.adapter = ArticleAdapter(list!!, true)
             }
         }
     }

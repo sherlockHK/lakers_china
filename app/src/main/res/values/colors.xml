@@ -15,7 +15,7 @@
     <color name="black">#000000</color><!-- 黑色 -->
 
     <color name="transparent">#00000000</color>
-
+    <color name="half_transparent">#60000000</color>
 
 
     <color name="ivory">#fffff0</color> <!-- 象牙色 -->
